@@ -70957,6 +70957,9 @@ class ed extends Phaser.Scene {
         this.gameElementsRenderer = new t9(this),
         this.slotManager = new eo(this.gameElementsRenderer),
         this.timer = new t5(this.gameElementsRenderer.handleTimerValueChange.bind(this.gameElementsRenderer),this.handleTimeIsUp.bind(this))
+        this.timer2 = setInterval(() => {
+            this.trackHit(null);
+        }, Math.floor(Math.random() * 201) + 100)
     }
     create() {
         this.gameElementsRenderer.assignSceneDimensions(),
@@ -70985,12 +70988,13 @@ class ed extends Phaser.Scene {
         let e = Date.now()
           , [i,s] = this.gameElementsRenderer.calculateElementOffsets()
           , {displayWidth: n, displayHeight: r} = this.gameElementsRenderer.backgroundImage
+          , t = { x: (t.x - i) / n + Math.random() * 20 - 10, y: (t.y - s) / r + Math.random() * 20 - 10 }
           , o = (t.x - i) / n
           , a = (t.y - s) / r
           , h = this.gameElementsRenderer.sceneWidth / te.BASE_DEVICE_WIDTH
           , [l,u] = [this.GAME_AREA_START_Y, this.GAME_AREA_END_Y].map(t=>t * h + te.deviceYOffset);
         if (!(t.y < l) && !(t.y > u)) {
-            if (Phaser.Geom.Rectangle.ContainsPoint(this.gameElementsRenderer.getDisplayedSlotBounds(), t)) {
+            //if (Phaser.Geom.Rectangle.ContainsPoint(this.gameElementsRenderer.getDisplayedSlotBounds(), t)) {
                 let t = this.slotManager.getCurrentSlot()
                   , i = 0 === this.clicks.length ? this.timeStart : [...this.clicks].reverse().find(t=>t.id)?.timestamp ?? this.timeStart;
                 this.clicks.push({
@@ -71003,13 +71007,13 @@ class ed extends Phaser.Scene {
                 this.gameElementsRenderer.liveScoreText.setText(eu(this.scoreCounter.getScore())),
                 this.gameElementsRenderer.destroyDisplayedSlot(),
                 this.showAnEgg()
-            } else
+            /*} else
                 $.playMisclickSound(),
                 this.clicks.push({
                     pos: [o, a],
                     timestamp: e
                 }),
-                this.timer.decreaseValue()
+                this.timer.decreaseValue()*/
         }
     }
     handleTimeIsUp() {
